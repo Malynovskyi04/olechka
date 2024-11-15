@@ -58,7 +58,7 @@
     }
 
     /* Скрытие блока */
-    .extra-text {
+    .hidden {
       display: none;
     }
 
@@ -223,31 +223,26 @@
     makeButtonMove(sickButton);
     makeButtonMove(examButton);
 
-    // Обработка нажатия на "Да" и запуск анимаций
+    // Обработка нажатия на "Да" и запуск формы выбора даты и времени
     yesButton.addEventListener("click", () => {
       inviteBox.classList.add("hidden");
       formBox.classList.remove("hidden");
-      startHearts(); // Запуск анимации с сердечками
-      startSnowflakes(); // Запуск анимации со снежинками
+      startSnowflakes();  // Запуск снежинок
+      startHearts();      // Запуск сердечек
     });
 
-    // Обработка нажатия на другие кнопки (они скрывают блок с выбором)
+    // Обработка нажатия на другие кнопки
     noButton.addEventListener("click", () => {
-      inviteBox.classList.add("hidden");
-      alert("Жаль, но я понял.");
+      alert("Очень жаль :(");
     });
-
     sickButton.addEventListener("click", () => {
-      inviteBox.classList.add("hidden");
-      alert("Береги здоровье!");
+      alert("Береги себя!");
     });
-
     examButton.addEventListener("click", () => {
-      inviteBox.classList.add("hidden");
       alert("Удачи на экзаменах!");
     });
 
-    // Обработка отправки письма через Gmail
+    // Обработка отправки данных при нажатии на кнопку "Отправить"
     sendButton.addEventListener("click", () => {
       const date = document.getElementById("date").value;
       const time = document.getElementById("time").value;
@@ -261,12 +256,21 @@
       const subject = "Запрос на свидание"; // Тема письма
       const body = `Выбрана дата свидания: ${date}, время: ${time}`; // Тело письма
 
-      // Формируем ссылку для отправки письма через Gmail
-      const mailtoLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      
-      // Открытие Gmail для отправки письма
-      window.location.href = mailtoLink;
+      if (isMobile()) {
+        // Если мобильное устройство, открываем почтовое приложение
+        const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.location.href = mailtoLink;
+      } else {
+        // Для ПК открываем Gmail в браузере
+        const mailtoLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.location.href = mailtoLink;
+      }
     });
+
+    // Проверка, мобильное ли устройство
+    function isMobile() {
+      return /Mobi|Android/i.test(navigator.userAgent);
+    }
   </script>
 </body>
 </html>
